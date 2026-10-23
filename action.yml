@@ -20,7 +20,7 @@ inputs:
     default: '600'
   interval:
     description: Seconds between attempts
-    default: '10'
+    default: '30'
 
 runs:
   using: composite

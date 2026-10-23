@@ -23,7 +23,7 @@ Pin to a full commit SHA rather than a tag, especially in jobs with `id-token: w
 | `expected` | yes      |                      | Value the field must report                              |
 | `field`    | no       | `active_commit_hash` | Field to compare; use dots for nested fields (`a.b.c`)   |
 | `timeout`  | no       | `600`                | Seconds before the step fails                            |
-| `interval` | no       | `10`                 | Seconds between attempts                                 |
+| `interval` | no       | `30`                 | Seconds between attempts                                 |
 
 Requests that fail or time out (10 s each) count as attempts and are retried until `timeout`.
 
