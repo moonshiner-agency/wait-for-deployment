@@ -33,8 +33,8 @@ Requests that fail or time out (10 s each) count as attempts and are retried unt
 
 ## Releasing
 
-Tag the commit `vX.Y.Z` and move the major tag to it:
+Tag the commit `vX.Y.Z` and move the major tag to it. Tags under `v*` are protected, so only repository admins can push them.
 
 ```sh
-git tag v1.0.0 && git tag -f v1 && git push origin v1.0.0 && git push -f origin v1
+git tag -m v1.0.1 v1.0.1 && git tag -f -m v1 v1 && git push origin v1.0.1 && git push -f origin v1
 ```
