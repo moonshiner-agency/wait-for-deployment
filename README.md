@@ -7,13 +7,17 @@ Every attempt logs the value it saw, so a stuck rollout is visible in the job lo
 ## Usage
 
 ```yaml
-- uses: moonshiner-agency/wait-for-deployment@<commit-sha> # v1.0.0
+- uses: moonshiner-agency/wait-for-deployment@<commit-sha> # vX.Y.Z
   with:
     url: https://app.example.com/api/version
     expected: ${{ github.sha }}
 ```
 
-Pin to a full commit SHA rather than a tag, especially in jobs with `id-token: write` or access to secrets.
+Pin to a full commit SHA rather than a tag, especially in jobs with `id-token: write` or access to secrets. To get the SHA of a release:
+
+```sh
+git ls-remote https://github.com/moonshiner-agency/wait-for-deployment 'refs/tags/vX.Y.Z^{}'
+```
 
 ## Inputs
 
