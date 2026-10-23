@@ -1,0 +1,54 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Serve a fake version endpoint
+        run: |
+          mkdir -p "$RUNNER_TEMP/www/api"
+          echo '{"active_commit_hash":"abc123","build":{"commit":"def456"}}' > "$RUNNER_TEMP/www/api/version"
+          python3 -m http.server 8080 --directory "$RUNNER_TEMP/www" &
+
+      - name: Succeeds on a matching top-level field
+        uses: ./
+        with:
+          url: http://localhost:8080/api/version
+          expected: abc123
+          timeout: 30
+          interval: 1
+
+      - name: Succeeds on a matching nested field
+        uses: ./
+        with:
+          url: http://localhost:8080/api/version
+          field: build.commit
+          expected: def456
+          timeout: 30
+          interval: 1
+
+      - name: Times out on a mismatch
+        id: mismatch
+        continue-on-error: true
+        uses: ./
+        with:
+          url: http://localhost:8080/api/version
+          expected: wrong
+          timeout: 3
+          interval: 1
+
+      - name: Assert the mismatch failed
+        if: steps.mismatch.outcome != 'failure'
+        run: exit 1

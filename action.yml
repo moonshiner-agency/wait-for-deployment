@@ -1,0 +1,35 @@
+name: Wait for deployment
+description: Polls a JSON endpoint until a field reports the expected value, such as the deployed commit hash.
+author: moonshiner
+branding:
+  icon: clock
+  color: blue
+
+inputs:
+  url:
+    description: JSON endpoint to poll, e.g. https://app.example.com/api/version
+    required: true
+  expected:
+    description: Value the field must report, e.g. the commit SHA that was deployed
+    required: true
+  field:
+    description: Field to compare; use dots for nested fields, e.g. build.commit
+    default: active_commit_hash
+  timeout:
+    description: Seconds before the step fails
+    default: '600'
+  interval:
+    description: Seconds between attempts
+    default: '10'
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        URL: ${{ inputs.url }}
+        EXPECTED: ${{ inputs.expected }}
+        FIELD: ${{ inputs.field }}
+        TIMEOUT: ${{ inputs.timeout }}
+        INTERVAL: ${{ inputs.interval }}
+      run: '"$GITHUB_ACTION_PATH/wait-for-deployment.sh"'
